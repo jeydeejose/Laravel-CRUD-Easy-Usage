@@ -9,6 +9,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Permissions
     Route::delete('permissions/destroy', 'PermissionsController@massDestroy')->name('permissions.massDestroy');
     Route::resource('permissions', 'PermissionsController');
+    Route::get('/permissions/create/{id}', 'PermissionsController@create')->name('permissions.create');
+    Route::post('/permissions/bulkcreate', 'PermissionsController@bulkcreate')->name('permissions.bulkcreate');
 
     // Roles
     Route::delete('roles/destroy', 'RolesController@massDestroy')->name('roles.massDestroy');

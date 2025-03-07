@@ -10,6 +10,7 @@ use App\Permission;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Carbon\Carbon;
 
 class PermissionsController extends Controller
 {
@@ -22,12 +23,26 @@ class PermissionsController extends Controller
         return view('admin.permissions.index', compact('permissions'));
     }
 
-    public function create()
+    public function create($bulkInsert=0)
     {
         abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.permissions.create');
+        return view('admin.permissions.create', compact('bulkInsert'));
     }
+
+    public function bulkcreate(Request $request)
+    {
+        abort_if(Gate::denies('permission_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $permission = Permission::insert([
+            ['title' => $request->all()["title"].'_access', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['title' => $request->all()["title"].'_show', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['title' => $request->all()["title"].'_create', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['title' => $request->all()["title"].'_edit', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+            ['title' => $request->all()["title"].'_delete', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now()],
+        ]);
+        return redirect()->route('admin.permissions.index');
+    }    
 
     public function store(StorePermissionRequest $request)
     {

@@ -3,11 +3,11 @@
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.create') }} {{ trans('cruds.permission.title_singular') }}
+        {{ (isset($bulkInsert) && $bulkInsert=="bulk") ? "Bulk"  : "" }} {{ trans('global.create') }} {{ trans('cruds.permission.title_singular') }}
     </div>
 
     <div class="card-body">
-        <form action="{{ route("admin.permissions.store") }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ (isset($bulkInsert) && $bulkInsert=="bulk") ? route("admin.permissions.bulkcreate") : route("admin.permissions.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                 <label for="title">{{ trans('cruds.permission.fields.title') }}*</label>
